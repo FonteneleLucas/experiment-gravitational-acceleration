@@ -88,56 +88,87 @@ class _ShowDataState extends State<ShowData> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
+//      resizeToAvoidBottomPadding: false,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            child: Stack(
+            margin: const EdgeInsets.only(left: 0, top: 40, right: 0, bottom: 0),
+//            color: Colors.blue,
+            child:  Row(
               children: <Widget>[
-                IconButton(
-                  padding: EdgeInsets.fromLTRB(15, 50, 0, 0),
-                  icon: Icon(Icons.arrow_back_ios),
-                  tooltip: 'Voltar',
-                  onPressed: () {
-                    print("Voltar");
-                    Navigator.of(context).pushNamed('/homePage');
-                    _connected = true;
-                  },
+                Expanded(
+                  flex: 2,
+                  child: Container(
+//                    color: Colors.grey,
+                    child: Container(
+                      width: 20,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios),
+                        iconSize: 40,
+                        color: Colors.green,
+                        tooltip: 'Voltar',
+                        onPressed: () {
+                          print("Voltar");
+                          Navigator.of(context).pushNamed('/homePage');
+                          _connected = true;
+                        },
+                      ),
+                    )
+                  ),
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(240, 50, 0, 0),
-                  child: Text(
-                    "Lançamentos: "+ contador.toString(),
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                Expanded(
+                  flex: 9,
+                  child: Container(
+                    alignment: Alignment(1, 0),
+//                    color: Colors.white70,
+                    child: Container(
+                      width: 100,
+                      color: Colors.white70,
+                      child: Text(
+                        "Lançamentos: "+ contador.toString(),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 40),
           Container(
+            margin: const EdgeInsets.only(left: 0, top: 100, right: 0, bottom: 0),
+//            color: Colors.lightBlueAccent,
             child: Stack(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(35, 130, 0, 0),
-                  child: Text(
-                    "Aceleração da gravidade:",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 175, 0, 0),
+                    margin: const EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 0),
+//                  height: 30,
                   child: Center(
                     child: Text(
-                      _gravidadeFinal.toStringAsFixed(2),
-                      style:
-                          TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                      "Aceleração da gravidade:",
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
+                  )
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 0, top: 50, right: 0, bottom: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+//                        color: Colors.red,
+                        child: Center(
+                          child: Text(
+                            _gravidadeFinal.toStringAsFixed(2),
+                            style:
+                            TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(270, 180, 0, 0),
+                  padding: EdgeInsets.fromLTRB(270, 55, 0, 0),
                   child: Text(
                     "m/s²",
                     style: TextStyle(
@@ -145,20 +176,17 @@ class _ShowDataState extends State<ShowData> {
                         fontWeight: FontWeight.bold,
                         color: Colors.green),
                   ),
-                )
+                ),
               ],
             ),
           ),
-          SizedBox(
-            height: 50,
-          ),
-
           Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              height: 40,
+              margin: const EdgeInsets.only(left: 8, top: 80, right: 8, bottom: 0),
+//              color: Colors.black,
+              height: 50,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/inicialPage');
+
                 },
                 child: Material(
                   borderRadius: BorderRadius.circular(20),
@@ -167,33 +195,32 @@ class _ShowDataState extends State<ShowData> {
                   elevation: 7,
                   child: Center(
                     child: Text(
-                      "GRÁFICOS",
+                      "DADOS ESTATÍSTICOS",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat'),
+                          fontFamily: 'Montserrat'
+                      ),
                     ),
                   ),
                 ),
-              )),
-          SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  resetCalc();
-                },
-                child: Text(
-                  'Calcular novamente',
-                  style: TextStyle(
-                      color: Colors.green,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline),
-                ),
               )
-            ],
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 0, top: 80, right: 0, bottom: 0),
+            child: InkWell(
+              onTap: () {
+                resetCalc();
+              },
+              child: Text(
+                'Calcular novamente',
+                style: TextStyle(
+                    color: Colors.green,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline),
+              ),
+            ),
           )
         ],
       ),
