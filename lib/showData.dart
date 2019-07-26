@@ -89,141 +89,202 @@ class _ShowDataState extends State<ShowData> {
   Widget build(BuildContext context) {
     return new Scaffold(
 //      resizeToAvoidBottomPadding: false,
-      body: Column(
+      body: PageView(
         children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(left: 0, top: 40, right: 0, bottom: 0),
+          Column(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(left: 0, top: 40, right: 0, bottom: 0),
 //            color: Colors.blue,
-            child:  Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: Container(
+                child:  Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
 //                    color: Colors.grey,
-                    child: Container(
-                      width: 20,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
-                        iconSize: 40,
-                        color: Colors.green,
-                        tooltip: 'Voltar',
-                        onPressed: () {
-                          print("Voltar");
-                          Navigator.of(context).pushNamed('/homePage');
-                          _connected = true;
-                        },
+                          child: Container(
+                            width: 20,
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back_ios),
+                              iconSize: 40,
+                              color: Colors.green,
+                              tooltip: 'Voltar',
+                              onPressed: () {
+                                print("Voltar");
+                                Navigator.of(context).pushNamed('/homePage');
+                                _connected = true;
+                              },
+                            ),
+                          )
                       ),
-                    )
-                  ),
-                ),
-                Expanded(
-                  flex: 9,
-                  child: Container(
-                    alignment: Alignment(1, 0),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: Container(
+                        alignment: Alignment(1, 0),
 //                    color: Colors.white70,
-                    child: Container(
-                      width: 100,
-                      color: Colors.white70,
-                      child: Text(
-                        "Lançamentos: "+ contador.toString(),
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(left: 0, top: 100, right: 0, bottom: 0),
-//            color: Colors.lightBlueAccent,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    margin: const EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 0),
-//                  height: 30,
-                  child: Center(
-                    child: Text(
-                      "Aceleração da gravidade:",
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 0, top: 50, right: 0, bottom: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-//                        color: Colors.red,
-                        child: Center(
+                        child: Container(
+                          width: 100,
+                          color: Colors.white70,
                           child: Text(
-                            _gravidadeFinal.toStringAsFixed(2),
-                            style:
-                            TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                            "Lançamentos: "+ contador.toString(),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(270, 55, 0, 0),
-                  child: Text(
-                    "m/s²",
-                    style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-              margin: const EdgeInsets.only(left: 8, top: 80, right: 8, bottom: 0),
-//              color: Colors.black,
-              height: 50,
-              child: InkWell(
-                onTap: () {
-
-                },
-                child: Material(
-                  borderRadius: BorderRadius.circular(20),
-                  shadowColor: Colors.greenAccent,
-                  color: Colors.green,
-                  elevation: 7,
-                  child: Center(
-                    child: Text(
-                      "DADOS ESTATÍSTICOS",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat'
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 0, top: 100, right: 0, bottom: 0),
+//            color: Colors.lightBlueAccent,
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                        margin: const EdgeInsets.only(left: 0, top: 0, right: 0, bottom: 0),
+//                  height: 30,
+                        child: Center(
+                          child: Text(
+                            "Aceleração da gravidade:",
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 0, top: 50, right: 0, bottom: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+//                        color: Colors.red,
+                            child: Center(
+                              child: Text(
+                                _gravidadeFinal.toStringAsFixed(2),
+                                style:
+                                TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(270, 55, 0, 0),
+                      child: Text(
+                        "m/s²",
+                        style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                  margin: const EdgeInsets.only(left: 8, top: 80, right: 8, bottom: 0),
+//              color: Colors.black,
+                  height: 50,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/showTable');
+                    },
+                    child: Material(
+                      borderRadius: BorderRadius.circular(20),
+                      shadowColor: Colors.greenAccent,
+                      color: Colors.green,
+                      elevation: 7,
+                      child: Center(
+                        child: Text(
+                          "DADOS ESTATÍSTICOS",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Montserrat'
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 0, top: 80, right: 0, bottom: 0),
+                child: InkWell(
+                  onTap: () {
+                    resetCalc();
+                  },
+                  child: Text(
+                    'Calcular novamente',
+                    style: TextStyle(
+                        color: Colors.green,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
                   ),
                 ),
               )
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(left: 0, top: 80, right: 0, bottom: 0),
-            child: InkWell(
-              onTap: () {
-                resetCalc();
-              },
-              child: Text(
-                'Calcular novamente',
-                style: TextStyle(
-                    color: Colors.green,
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline),
+
+          //PAGE 2
+
+          Column(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(left: 0, top: 40, right: 0, bottom: 0),
+//            color: Colors.blue,
+                child:  Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+//                    color: Colors.grey,
+                          child: Container(
+                            width: 20,
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back_ios),
+                              iconSize: 40,
+                              color: Colors.green,
+                              tooltip: 'Voltar',
+                              onPressed: () {
+                                print("Voltar");
+                                Navigator.of(context).pushNamed('/showData');
+                                _connected = true;
+                              },
+                            ),
+                          )
+                      ),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: Container(
+                        alignment: Alignment(1, 0),
+//                    color: Colors.white70,
+                        child: Container(
+                          width: 100,
+                          color: Colors.white70,
+                          child: Text(
+                            "Lançamentos: "+ contador.toString(),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              Container(
+                  color: Colors.lightBlueAccent,
+                  child: Text("asd")
+              )
+            ],
           )
         ],
+        pageSnapping: false,
       ),
+
+
     );
   }
 }
