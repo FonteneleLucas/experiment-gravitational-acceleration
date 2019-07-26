@@ -134,48 +134,39 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
+//      resizeToAvoidBottomPadding: false,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-
-
-          SizedBox(height: 100),
-
           Container(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 40),
-                  child: Center(
-                    child: Text(
-                      "Dispositivos:",
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-
-                ),
-                SizedBox(height: 40,),
-                Container(
-                  padding: EdgeInsets.fromLTRB(20, 100, 20, 0),
-
+              margin: const EdgeInsets.only(left: 0, top: 120, right: 0, bottom: 0),
+//              color: Colors.blue,
+              child: Center(
+              child: Text(
+                "Dispositivos:",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+            )
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 8, top: 80, right: 8, bottom: 0),
+            height: 50,
+            child: Material(
+              borderRadius: BorderRadius.circular(2),
+                  elevation: 1,
+                child: Center(
                   child: DropdownButton(
+                    style: TextStyle(letterSpacing: 2, fontWeight: FontWeight.bold, color: Colors.black),
                     items: _getDeviceItems(),
                     onChanged: (value) => setState(() => _device = value),
                     value: _device,
                     isExpanded: true,
                   ),
                 ),
-                SizedBox(height: 40,),
-
-              ],
-            ),
+              ),
           ),
-
-          SizedBox(height: 100,),
           Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              height: 40,
+            margin: const EdgeInsets.only(left: 8, top: 80, right: 8, bottom: 0),
+              height: 50,
               child: InkWell(
                 onTap: () {
                   _connected ? _disconnect() : _connect();
@@ -198,41 +189,42 @@ class _HomePageState extends State<HomePage> {
                 ),
               )
           ),
-          SizedBox(height: 110),
           Container(
-            child: Stack(
-              children: <Widget>[
-                IconButton(
-                  padding: EdgeInsets.fromLTRB(280, 50, 0, 0),
-                  icon: Icon(Icons.arrow_forward_ios),
-                  iconSize: 60,
-                  tooltip: 'Voltar',
-                  color: Colors.green,
-                  onPressed: () {
-                    if(_connected == true){
-                      print("Próximo");
+            margin: const EdgeInsets.only(left: 0, top: 150, right: 0, bottom: 0),
+//            color: Colors.green,
+            alignment: Alignment(0.9, 0),
+            child:  Container(
+                height: 60,
+                width: 120,
+//                color: Colors.blue,
+                child: InkWell(
+                    onTap: () {
+//                  _connected ? _disconnect() : _connect();
+//                      print("proximo");
                       Navigator.of(context).pushNamed('/showData');
-                    }else{
-                      print("Nadaa");
-                    }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Próximo",
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.green,
+                          size: 60.0,
+                        )
 
-
-                  },
-
-                ),
-
-                Container(
-                  padding: EdgeInsets.fromLTRB(240, 93, 0, 0),
-                  child: Text(
-                    "Próximo",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
+                      ],
+                    )
+                )
             ),
-          ),
+          )
+
+
         ],
-      ),
+      )
     );
   }
 
