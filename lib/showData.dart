@@ -20,12 +20,12 @@ class ShowData extends StatefulWidget {
 
 String selectedTooltip;
 
-class LinearSales {
-  final double year;
-  final double sales;
+class ScatterPlot {
+  final int lancamento;
+  final double tempo;
+  final double gravidade;
 
-
-  LinearSales(this.year, this.sales);
+  ScatterPlot(this.lancamento, this.tempo, this.gravidade);
 }
 
 class _ShowDataState extends State<ShowData> {
@@ -132,31 +132,43 @@ class _ShowDataState extends State<ShowData> {
   @override
   Widget build(BuildContext context) {
 
-    var data = [
-//      new LinearSales(0, 5),
-//      new LinearSales(1, 25),
-//      new LinearSales(2, 100),
-//      new LinearSales(3, 75),
-      new LinearSales(1, 9.8),
-      new LinearSales(2, 9.9),
-      new LinearSales(3, 10.2),
-      new LinearSales(4, 10.4),
-      new LinearSales(5, 9.5),
-      new LinearSales(6, 10.1),
-      new LinearSales(7, 9.7),
-      new LinearSales(8, 10.3),
-      new LinearSales(9, 10.7),
-      new LinearSales(10, 9.8),
-    ];
+    var scatterPlot = new List<ScatterPlot>();
 
-    var series = [
+    var series1 = [
       new Series(
         id: 'Sales',
         colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: data,
+        domainFn: (Gravity _gravity, _) => _gravity.lancamento,
+        measureFn: (Gravity _gravity, _) => _gravity.gravidade,
+        data: gravity.dados,
       ),
+    ];
+
+    var series2 = [
+      new Series(
+        id: 'Sales',
+        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        domainFn: (Gravity _gravity, _) => _gravity.lancamento,
+        measureFn: (Gravity _gravity, _) => _gravity.tempo,
+        data: gravity.dados,
+      ),
+    ];
+
+//    for(int i = 0; i < gravity.dados.length; i++){
+//      var scatter = ScatterPlot(i+1, gravity.dados.elementAt(i).tempo, gravity.dados.elementAt(i).gravidade);
+//      scatterPlot.add(scatter);
+//    }
+
+    var series3 = [
+      new Series(
+        id: 'Sales',
+          colorFn: (_, __) => MaterialPalette.purple.shadeDefault,
+        domainFn: (Gravity _gravity, _) => _gravity.lancamento,
+        measureFn: (Gravity _gravity, _) => _gravity.tempo,
+        data: gravity.dados,)
+      // Configure our custom line renderer for this series.
+        ..setAttribute(rendererIdKey, 'customLine'),
+
     ];
 
 //    gravity.setValues(0, 0.46);
@@ -775,7 +787,7 @@ class _ShowDataState extends State<ShowData> {
                                   padding: new EdgeInsets.all(15),
                                   child: new SizedBox(
                                       height: 200.0,
-                                      child: LineChart(series,
+                                      child: LineChart(series1,
                                         behaviors: [
                                           new ChartTitle('Lançamentos',
                                               behaviorPosition: BehaviorPosition.bottom,
@@ -818,7 +830,7 @@ class _ShowDataState extends State<ShowData> {
                                   padding: new EdgeInsets.all(15),
                                   child: new SizedBox(
                                       height: 200.0,
-                                      child: LineChart(series,
+                                      child: LineChart(series2,
                                         behaviors: [
                                           new ChartTitle('Lançamentos',
                                               behaviorPosition: BehaviorPosition.bottom,
@@ -861,7 +873,7 @@ class _ShowDataState extends State<ShowData> {
                                   padding: new EdgeInsets.all(15),
                                   child: new SizedBox(
                                       height: 200.0,
-                                      child: LineChart(series,
+                                      child: ScatterPlotChart(series3,
                                         behaviors: [
                                           new ChartTitle('Lançamentos',
                                               behaviorPosition: BehaviorPosition.bottom,
@@ -886,7 +898,13 @@ class _ShowDataState extends State<ShowData> {
                                               }
                                           )
                                         ],
-                                        defaultRenderer: LineRendererConfig(includePoints: true),
+                                        defaultRenderer: PointRendererConfig(),
+                                        customSeriesRenderers: [
+                                          LineRendererConfig(
+                                              customRendererId: 'customLine',
+                                              layoutPaintOrder: LayoutViewPaintOrder.point + 1
+                                          )
+                                        ],
                                       )
                                   ),
                                 ),
@@ -933,3 +951,5 @@ class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
     );
   }
 }
+
+

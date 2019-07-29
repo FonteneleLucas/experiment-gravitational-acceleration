@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
 import 'package:charts_flutter/src/text_element.dart';
 import 'package:charts_flutter/src/text_style.dart' as style;
+import 'package:gravity_sensor/Gravity.dart';
 
 class ShowChart extends StatefulWidget {
   @override
@@ -42,6 +43,25 @@ class _ShowChartState extends State<ShowChart> {
       new LinearSales(9, 10.7),
       new LinearSales(10, 9.8),
     ];
+
+    var gravity = Gravity();
+    for(int i = 0; i < 10;i++){
+      print("N: ${i} : G: ${gravity.dados.elementAt(i).gravidade}");
+    }
+
+    print(gravity.dados.elementAt(0).toString());
+//    for(int i = 0; i < gravity.dados.length;i++){
+//      print("Entrou");
+//      print("V2: ${gravity.dados.elementAt(i).toString()}");
+//    }
+
+//    for(int i = 0; i < data.length;i++){
+//      print("V: ${data.elementAt(i).toString()}");
+//    }
+
+
+
+
 
     var series = [
       new Series(
