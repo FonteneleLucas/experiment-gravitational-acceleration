@@ -10,9 +10,12 @@ class ShowChart extends StatefulWidget {
   _ShowChartState createState() => new _ShowChartState();
 }
 
+String selectedTooltip;
+
 class LinearSales {
   final double year;
   final double sales;
+
 
   LinearSales(this.year, this.sales);
 }
@@ -20,23 +23,24 @@ class LinearSales {
 
 class _ShowChartState extends State<ShowChart> {
 
+
   @override
   Widget build(BuildContext context) {
     var data = [
-      new LinearSales(0, 5),
-      new LinearSales(1, 25),
-      new LinearSales(2, 100),
-      new LinearSales(3, 75),
-//      new LinearSales(1, 9.8),
-//      new LinearSales(2, 9.9),
-//      new LinearSales(3, 10.2),
-//      new LinearSales(4, 10.4),
-//      new LinearSales(5, 9.5),
-//      new LinearSales(6, 10.1),
-//      new LinearSales(7, 9.7),
-//      new LinearSales(8, 10.3),
-//      new LinearSales(9, 10.7),
-//      new LinearSales(10, 9.8),
+//      new LinearSales(0, 5),
+//      new LinearSales(1, 25),
+//      new LinearSales(2, 100),
+//      new LinearSales(3, 75),
+      new LinearSales(1, 9.8),
+      new LinearSales(2, 9.9),
+      new LinearSales(3, 10.2),
+      new LinearSales(4, 10.4),
+      new LinearSales(5, 9.5),
+      new LinearSales(6, 10.1),
+      new LinearSales(7, 9.7),
+      new LinearSales(8, 10.3),
+      new LinearSales(9, 10.7),
+      new LinearSales(10, 9.8),
     ];
 
     var series = [
@@ -110,18 +114,30 @@ class _ShowChartState extends State<ShowChart> {
                         height: 200.0,
                         child: LineChart(series,
                           behaviors: [
+                            new ChartTitle('Lançamentos',
+                                behaviorPosition: BehaviorPosition.bottom,
+                                titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                titleOutsideJustification:
+                                OutsideJustification.middleDrawArea),
+                            new ChartTitle('Gravidade (m/s²)',
+                                behaviorPosition: BehaviorPosition.start,
+                                titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                titleOutsideJustification:
+                                OutsideJustification.middleDrawArea),
                             LinePointHighlighter(
                                 symbolRenderer: CustomCircleSymbolRenderer()
                             )
+
                           ],
                           selectionModels: [
                             SelectionModelConfig(
                                 changedListener: (SelectionModel model) {
                                   if(model.hasDatumSelection)
-                                    print(model.selectedSeries[0].measureFn(model.selectedDatum[0].index));
+                                    selectedTooltip = model.selectedSeries[0].measureFn(model.selectedDatum[0].index).toString();
                                 }
                             )
                           ],
+                          defaultRenderer: LineRendererConfig(includePoints: true),
                         )
                       ),
                     ),
@@ -138,8 +154,34 @@ class _ShowChartState extends State<ShowChart> {
                       child: Padding(
                         padding: new EdgeInsets.all(15),
                         child: new SizedBox(
-                          height: 200.0,
-//                          child: charts.LineChart(series, animate: true),
+                            height: 200.0,
+                            child: LineChart(series,
+                              behaviors: [
+                                new ChartTitle('Lançamentos',
+                                    behaviorPosition: BehaviorPosition.bottom,
+                                    titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                    titleOutsideJustification:
+                                    OutsideJustification.middleDrawArea),
+                                new ChartTitle('Tempo (ms)',
+                                    behaviorPosition: BehaviorPosition.start,
+                                    titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                    titleOutsideJustification:
+                                    OutsideJustification.middleDrawArea),
+                                LinePointHighlighter(
+                                    symbolRenderer: CustomCircleSymbolRenderer()
+                                )
+
+                              ],
+                              selectionModels: [
+                                SelectionModelConfig(
+                                    changedListener: (SelectionModel model) {
+                                      if(model.hasDatumSelection)
+                                        selectedTooltip = model.selectedSeries[0].measureFn(model.selectedDatum[0].index).toString();
+                                    }
+                                )
+                              ],
+                              defaultRenderer: LineRendererConfig(includePoints: true),
+                            )
                         ),
                       ),
                     )
@@ -155,16 +197,40 @@ class _ShowChartState extends State<ShowChart> {
                       child: Padding(
                         padding: new EdgeInsets.all(15),
                         child: new SizedBox(
-                          height: 200.0,
-//                          child: charts.LineChart(series, animate: true),
+                            height: 200.0,
+                            child: LineChart(series,
+                              behaviors: [
+                                new ChartTitle('Lançamentos',
+                                    behaviorPosition: BehaviorPosition.bottom,
+                                    titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                    titleOutsideJustification:
+                                    OutsideJustification.middleDrawArea),
+                                new ChartTitle('Gravidade,Tempo',
+                                    behaviorPosition: BehaviorPosition.start,
+                                    titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                    titleOutsideJustification:
+                                    OutsideJustification.middleDrawArea),
+                                LinePointHighlighter(
+                                    symbolRenderer: CustomCircleSymbolRenderer()
+                                )
+
+                              ],
+                              selectionModels: [
+                                SelectionModelConfig(
+                                    changedListener: (SelectionModel model) {
+                                      if(model.hasDatumSelection)
+                                        selectedTooltip = model.selectedSeries[0].measureFn(model.selectedDatum[0].index).toString();
+                                    }
+                                )
+                              ],
+                              defaultRenderer: LineRendererConfig(includePoints: true),
+                            )
                         ),
                       ),
                     )
                 ),
               ],
             )
-
-
         )
     );
   }
@@ -174,15 +240,13 @@ class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
   @override
   void paint(ChartCanvas canvas, Rectangle<num> bounds, {List<int> dashPattern, Color fillColor, Color strokeColor, double strokeWidthPx}) {
     super.paint(canvas, bounds, dashPattern: dashPattern, fillColor: fillColor, strokeColor: strokeColor, strokeWidthPx: strokeWidthPx);
-    canvas.drawRect(
-        Rectangle(bounds.left - 5, bounds.top - 30, bounds.width + 10, bounds.height + 10),
-        fill: Color.white
-    );
+
     var textStyle = style.TextStyle();
+    textStyle.fontFamily = 'Montserrat';
     textStyle.color = Color.black;
-    textStyle.fontSize = 15;
+    textStyle.fontSize = 10;
     canvas.drawText(
-        TextElement("1", style: textStyle),
+        TextElement(selectedTooltip, style: textStyle),
         (bounds.left).round(),
         (bounds.top - 28).round()
     );
