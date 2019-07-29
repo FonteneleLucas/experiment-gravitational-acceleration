@@ -24,7 +24,7 @@ class _ShowTableState extends State<ShowTable> {
 
         ),
         DataColumn(
-          label: Text("Gravidade"),
+          label: Text("Gravidade(m/s²)"),
           numeric: true,
         ),
       ],

@@ -99,12 +99,12 @@ class _ShowDataState extends State<ShowData> {
 
         ),
         DataColumn(
-          label: Text("Tempo (ms)"),
+          label: Text("Tempo (ms)", style: TextStyle(fontSize: 10),),
           numeric: true,
 
         ),
         DataColumn(
-          label: Text("Gravidade"),
+          label: Text("Gravidade (m/s²)",  style: TextStyle(fontSize: 10)),
           numeric: true,
         ),
       ],
@@ -245,7 +245,7 @@ class _ShowDataState extends State<ShowData> {
                         ),
                       ),
                       Container(
-                          margin: const EdgeInsets.only(left: 8, top: 80, right: 8, bottom: 0),
+                          margin: const EdgeInsets.only(left: 6, top: 80, right: 6, bottom: 0),
 //              color: Colors.black,
                           height: 50,
                           child: InkWell(
@@ -657,6 +657,7 @@ class _ShowDataState extends State<ShowData> {
                                         height: 50,
                                         child: InkWell(
                                           onTap: () {
+                                            Navigator.of(context).pushNamed('/showChart');
                                           },
                                           child: Material(
                                             borderRadius: BorderRadius.circular(20),
