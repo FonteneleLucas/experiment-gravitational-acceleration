@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 //import 'package:flutter_blue/flutter_blue.dart';
 
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => new _HomePageState();
+}
+
+
+class LinearSales {
+  final double year;
+  final double sales;
+
+
+  LinearSales(this.year, this.sales);
 }
 
 class _HomePageState extends State<HomePage> {

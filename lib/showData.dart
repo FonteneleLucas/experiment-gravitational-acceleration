@@ -1,14 +1,31 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:page_indicator/page_indicator.dart';
+
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart';
+import 'package:charts_flutter/src/text_element.dart';
+import 'package:charts_flutter/src/text_style.dart' as style;
+
 
 import 'Gravity.dart';
 
 class ShowData extends StatefulWidget {
   @override
   _ShowDataState createState() => new _ShowDataState();
+}
+
+String selectedTooltip;
+
+class LinearSales {
+  final double year;
+  final double sales;
+
+
+  LinearSales(this.year, this.sales);
 }
 
 class _ShowDataState extends State<ShowData> {
@@ -21,13 +38,7 @@ class _ShowDataState extends State<ShowData> {
   bool _connected = false;
   int contador = 0;
   double tempo = 0;
-  double h = 1.0;
-  double _gravidade = 0;
   double _gravidadeFinal = 0;
-
-  var values = new List(10);
-  var time = new List(10);
-  var gravidade = new List(10);
 
 
 
@@ -47,22 +58,7 @@ class _ShowDataState extends State<ShowData> {
 
   }
 
-  void calculoGravidade(){
-    if(tempo > 0 && contador < 10){
-      time[contador] = tempo;
-      gravidade[contador] =  (2*h/(tempo*tempo));
-      contador++;
-    }
-
-    if(contador == 10){
-      double cont = 0;
-      for(int i = 0; i < 10;i++){
-        cont += gravidade[i];
-      }
-      _gravidadeFinal = cont/contador;
-    }
-
-  }
+  void calculoGravidade(){}
 
   Future<void> initPlatformState() async {
     bluetooth.onRead().listen((msg) {
@@ -72,6 +68,7 @@ class _ShowDataState extends State<ShowData> {
         tempo = double.parse(_text.text.toString());
         print(tempo);
         _text.text = "";
+        //Passa os dados para a classe aqui
         calculoGravidade();
       });
     });
@@ -123,7 +120,7 @@ class _ShowDataState extends State<ShowData> {
               placeholder: false,
             ),
             DataCell(
-              Text(name.gravidade.toString(), style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+              Text(name.gravidade.toStringAsFixed(2), style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               showEditIcon: false,
               placeholder: false,
             )
@@ -135,16 +132,54 @@ class _ShowDataState extends State<ShowData> {
   @override
   Widget build(BuildContext context) {
 
-    gravity.setValues(1, 0.45, 10);
-    gravity.setValues(2, 0.47, 9);
-    gravity.setValues(3, 0.43, 10);
-    gravity.setValues(4, 0.42, 10);
-    gravity.setValues(5, 0.49, 10);
-    gravity.setValues(6, 0.41, 10);
-    gravity.setValues(7, 0.38, 10);
-    gravity.setValues(8, 0.59, 10);
-    gravity.setValues(9, 0.38, 10);
-    gravity.setValues(10, 0.59, 10);
+    var data = [
+//      new LinearSales(0, 5),
+//      new LinearSales(1, 25),
+//      new LinearSales(2, 100),
+//      new LinearSales(3, 75),
+      new LinearSales(1, 9.8),
+      new LinearSales(2, 9.9),
+      new LinearSales(3, 10.2),
+      new LinearSales(4, 10.4),
+      new LinearSales(5, 9.5),
+      new LinearSales(6, 10.1),
+      new LinearSales(7, 9.7),
+      new LinearSales(8, 10.3),
+      new LinearSales(9, 10.7),
+      new LinearSales(10, 9.8),
+    ];
+
+    var series = [
+      new Series(
+        id: 'Sales',
+        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        domainFn: (LinearSales sales, _) => sales.year,
+        measureFn: (LinearSales sales, _) => sales.sales,
+        data: data,
+      ),
+    ];
+
+//    gravity.setValues(0, 0.46);
+    gravity.setValues(1, 0.45);
+    gravity.setValues(2, 0.47);
+    gravity.setValues(3, 0.43);
+    gravity.setValues(4, 0.42);
+    gravity.setValues(5, 0.49);
+    gravity.setValues(6, 0.41);
+    gravity.setValues(7, 0.38);
+    gravity.setValues(8, 0.59);
+    gravity.setValues(9, 0.38);
+    gravity.setValues(10, 0.45);
+
+    contador = 10;
+
+    //10 número de amostras
+    if(gravity.lancamento == 10){
+      _gravidadeFinal = gravity.calcGravidadeMedia();
+      print("Gravidade média 2 : ${gravity.calcGravidadeMedia()}");
+    }
+
+
 
     return new Scaffold(
 //      resizeToAvoidBottomPadding: false,
@@ -186,8 +221,7 @@ class _ShowDataState extends State<ShowData> {
                                 alignment: Alignment(0.9, 0),
 //                    color: Colors.white70,
                                 child: Container(
-                                  width: 100,
-                                  color: Colors.white70,
+                                  width: 105,
                                   child: Text(
                                     "Lançamentos: "+ contador.toString(),
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -390,7 +424,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text("10,00",
+                                                          child: Text(_gravidadeFinal.toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
@@ -434,7 +468,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text("0.45",
+                                                          child: Text(gravity.tempoMedio().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
@@ -682,13 +716,191 @@ class _ShowDataState extends State<ShowData> {
                               ),
                             )
                           ])
+                  ),
+
+                  // ################ PAGE 3  #################### //
+
+                  SingleChildScrollView(
+
+                      child: Column(
+                        children: <Widget>[
+                          Stack(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.only(left: 0, top: 40, right: 0, bottom: 0),
+//            color: Colors.lightBlue,
+                                  height: 60,
+                                  child: Center(
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Container(
+                                            alignment: Alignment(-1, 0),
+//                color: Colors.lightBlue,
+                                            child: IconButton(
+                                              icon: Icon(Icons.arrow_back_ios),
+                                              iconSize: 40,
+                                              color: Colors.green,
+                                              tooltip: 'Voltar',
+                                              onPressed: () {
+                                                print("Voltar");
+                                                Navigator.of(context).pushNamed('/homePage');
+                                              },
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment(0, 0),
+                                            child: Text(
+                                              "GRÁFICOS",
+                                              style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Montserrat'
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              ]),
+                          Container(
+                              margin: EdgeInsets.only(top: 10,bottom: 10),
+                              child: Text("GRAVIDADE", style: TextStyle(color: Colors.green,fontSize: 18, fontFamily: 'Montserrat' ,
+                                  fontWeight: FontWeight.bold))
+                          ),
+                          Container(
+                              child: Material(
+                                elevation: 2,
+                                child: Padding(
+                                  padding: new EdgeInsets.all(15),
+                                  child: new SizedBox(
+                                      height: 200.0,
+                                      child: LineChart(series,
+                                        behaviors: [
+                                          new ChartTitle('Lançamentos',
+                                              behaviorPosition: BehaviorPosition.bottom,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+                                          new ChartTitle('Gravidade (m/s²)',
+                                              behaviorPosition: BehaviorPosition.start,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+                                          LinePointHighlighter(
+                                              symbolRenderer: CustomCircleSymbolRenderer()
+                                          )
+
+                                        ],
+                                        selectionModels: [
+                                          SelectionModelConfig(
+                                              changedListener: (SelectionModel model) {
+                                                if(model.hasDatumSelection)
+                                                  selectedTooltip = model.selectedSeries[0].measureFn(model.selectedDatum[0].index).toString();
+                                              }
+                                          )
+                                        ],
+                                        defaultRenderer: LineRendererConfig(includePoints: true),
+                                      )
+                                  ),
+                                ),
+                              )
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(top: 10,bottom: 10),
+                              child: Text("TEMPO", style: TextStyle(color: Colors.green,fontSize: 18, fontFamily: 'Montserrat' ,
+                                  fontWeight: FontWeight.bold))
+                          ),
+                          Container(
+                              child: Material(
+                                elevation: 2,
+                                child: Padding(
+                                  padding: new EdgeInsets.all(15),
+                                  child: new SizedBox(
+                                      height: 200.0,
+                                      child: LineChart(series,
+                                        behaviors: [
+                                          new ChartTitle('Lançamentos',
+                                              behaviorPosition: BehaviorPosition.bottom,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+                                          new ChartTitle('Tempo (ms)',
+                                              behaviorPosition: BehaviorPosition.start,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+                                          LinePointHighlighter(
+                                              symbolRenderer: CustomCircleSymbolRenderer()
+                                          )
+
+                                        ],
+                                        selectionModels: [
+                                          SelectionModelConfig(
+                                              changedListener: (SelectionModel model) {
+                                                if(model.hasDatumSelection)
+                                                  selectedTooltip = model.selectedSeries[0].measureFn(model.selectedDatum[0].index).toString();
+                                              }
+                                          )
+                                        ],
+                                        defaultRenderer: LineRendererConfig(includePoints: true),
+                                      )
+                                  ),
+                                ),
+                              )
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(top: 10,bottom: 10),
+                              child: Text("GRAVIDADE x TEMPO", style: TextStyle(color: Colors.green,fontSize: 18, fontFamily: 'Montserrat' ,
+                                  fontWeight: FontWeight.bold))
+                          ),
+                          Container(
+                              child: Material(
+                                elevation: 2,
+                                child: Padding(
+                                  padding: new EdgeInsets.all(15),
+                                  child: new SizedBox(
+                                      height: 200.0,
+                                      child: LineChart(series,
+                                        behaviors: [
+                                          new ChartTitle('Lançamentos',
+                                              behaviorPosition: BehaviorPosition.bottom,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+                                          new ChartTitle('Gravidade,Tempo',
+                                              behaviorPosition: BehaviorPosition.start,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+                                          LinePointHighlighter(
+                                              symbolRenderer: CustomCircleSymbolRenderer()
+                                          )
+
+                                        ],
+                                        selectionModels: [
+                                          SelectionModelConfig(
+                                              changedListener: (SelectionModel model) {
+                                                if(model.hasDatumSelection)
+                                                  selectedTooltip = model.selectedSeries[0].measureFn(model.selectedDatum[0].index).toString();
+                                              }
+                                          )
+                                        ],
+                                        defaultRenderer: LineRendererConfig(includePoints: true),
+                                      )
+                                  ),
+                                ),
+                              )
+                          ),
+                        ],
+                      )
                   )
 
                 ],
                 controller: new PageController(),
               ),
               align: IndicatorAlign.bottom,
-              length: 2,
+              length: 3,
               indicatorSpace: 10.0,
               indicatorColor: Colors.black26,
               indicatorSelectorColor: Colors.green,
@@ -700,6 +912,24 @@ class _ShowDataState extends State<ShowData> {
 
 
 
+    );
+  }
+}
+
+
+class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
+  @override
+  void paint(ChartCanvas canvas, Rectangle<num> bounds, {List<int> dashPattern, Color fillColor, Color strokeColor, double strokeWidthPx}) {
+    super.paint(canvas, bounds, dashPattern: dashPattern, fillColor: fillColor, strokeColor: strokeColor, strokeWidthPx: strokeWidthPx);
+
+    var textStyle = style.TextStyle();
+    textStyle.fontFamily = 'Montserrat';
+    textStyle.color = Color.black;
+    textStyle.fontSize = 10;
+    canvas.drawText(
+        TextElement(selectedTooltip, style: textStyle),
+        (bounds.left).round(),
+        (bounds.top - 28).round()
     );
   }
 }

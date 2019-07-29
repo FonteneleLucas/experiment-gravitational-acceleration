@@ -55,16 +55,16 @@ class _ShowTableState extends State<ShowTable> {
   @override
   Widget build(BuildContext context) {
 
-    gravity.setValues(1, 0.45, 10);
-    gravity.setValues(2, 0.47, 9);
-    gravity.setValues(3, 0.43, 10);
-    gravity.setValues(4, 0.42, 10);
-    gravity.setValues(5, 0.49, 10);
-    gravity.setValues(6, 0.41, 10);
-    gravity.setValues(7, 0.38, 10);
-    gravity.setValues(8, 0.59, 10);
-    gravity.setValues(9, 0.38, 10);
-    gravity.setValues(10, 0.59, 10);
+//    gravity.setValues(1, 0.45, 10);
+//    gravity.setValues(2, 0.47, 9);
+//    gravity.setValues(3, 0.43, 10);
+//    gravity.setValues(4, 0.42, 10);
+//    gravity.setValues(5, 0.49, 10);
+//    gravity.setValues(6, 0.41, 10);
+//    gravity.setValues(7, 0.38, 10);
+//    gravity.setValues(8, 0.59, 10);
+//    gravity.setValues(9, 0.38, 10);
+//    gravity.setValues(10, 0.59, 10);
 
 
     return Scaffold(
