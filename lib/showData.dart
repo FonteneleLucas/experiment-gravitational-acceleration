@@ -21,12 +21,13 @@ class ShowData extends StatefulWidget {
 String selectedTooltip;
 
 class ScatterPlot {
-  final int lancamento;
   final double tempo;
   final double gravidade;
+  final int radius;
 
-  ScatterPlot(this.lancamento, this.tempo, this.gravidade);
+  ScatterPlot(this.tempo, this.gravidade, this.radius);
 }
+
 
 class _ShowDataState extends State<ShowData> {
   PageController controller;
@@ -154,21 +155,15 @@ class _ShowDataState extends State<ShowData> {
       ),
     ];
 
-//    for(int i = 0; i < gravity.dados.length; i++){
-//      var scatter = ScatterPlot(i+1, gravity.dados.elementAt(i).tempo, gravity.dados.elementAt(i).gravidade);
-//      scatterPlot.add(scatter);
-//    }
-
     var series3 = [
       new Series(
         id: 'Sales',
-          colorFn: (_, __) => MaterialPalette.purple.shadeDefault,
-        domainFn: (Gravity _gravity, _) => _gravity.lancamento,
+        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        domainFn: (Gravity _gravity, _) => _gravity.gravidade,
         measureFn: (Gravity _gravity, _) => _gravity.tempo,
-        data: gravity.dados,)
-      // Configure our custom line renderer for this series.
-        ..setAttribute(rendererIdKey, 'customLine'),
-
+        radiusPxFn: (Gravity _gravity, _) => 3,
+        data: gravity.dados,
+      )
     ];
 
 //    gravity.setValues(0, 0.46);
@@ -195,7 +190,7 @@ class _ShowDataState extends State<ShowData> {
 
     return new Scaffold(
 //      resizeToAvoidBottomPadding: false,
-      body: Center(
+        body: Center(
           child: Container(
             child: PageIndicatorContainer(
               pageView: PageView(
@@ -873,39 +868,7 @@ class _ShowDataState extends State<ShowData> {
                                   padding: new EdgeInsets.all(15),
                                   child: new SizedBox(
                                       height: 200.0,
-                                      child: ScatterPlotChart(series3,
-                                        behaviors: [
-                                          new ChartTitle('Lançamentos',
-                                              behaviorPosition: BehaviorPosition.bottom,
-                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
-                                              titleOutsideJustification:
-                                              OutsideJustification.middleDrawArea),
-                                          new ChartTitle('Gravidade,Tempo',
-                                              behaviorPosition: BehaviorPosition.start,
-                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
-                                              titleOutsideJustification:
-                                              OutsideJustification.middleDrawArea),
-                                          LinePointHighlighter(
-                                              symbolRenderer: CustomCircleSymbolRenderer()
-                                          )
-
-                                        ],
-                                        selectionModels: [
-                                          SelectionModelConfig(
-                                              changedListener: (SelectionModel model) {
-                                                if(model.hasDatumSelection)
-                                                  selectedTooltip = model.selectedSeries[0].measureFn(model.selectedDatum[0].index).toString();
-                                              }
-                                          )
-                                        ],
-                                        defaultRenderer: PointRendererConfig(),
-                                        customSeriesRenderers: [
-                                          LineRendererConfig(
-                                              customRendererId: 'customLine',
-                                              layoutPaintOrder: LayoutViewPaintOrder.point + 1
-                                          )
-                                        ],
-                                      )
+                                      child: ScatterPlotChart(series3,animate: true,)
                                   ),
                                 ),
                               )
@@ -926,7 +889,7 @@ class _ShowDataState extends State<ShowData> {
             ),
           ),
 
-      )
+        )
 
 
 
