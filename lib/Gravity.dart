@@ -1,4 +1,4 @@
-
+import 'dart:math';
 
 class Gravity {
   double h = 1.0;
@@ -9,6 +9,9 @@ class Gravity {
   Gravity({this.lancamento, this.tempo, this.gravidade});
 
   var dados = new List<Gravity>();
+  var tempoOrdenado = new List<double>();
+  var gravidadeOrdenado = new List<double>();
+
 
 
   int get getLancamento {
@@ -44,6 +47,8 @@ class Gravity {
 
   clearData(){
     dados.clear();
+    tempoOrdenado.clear();
+    gravidadeOrdenado.clear();
   }
 
   double calculaGravidade(int lancamento, double tempo) {
@@ -63,13 +68,79 @@ class Gravity {
 
   double tempoMedio() {
     double cont = 0;
-    for(int i = 0; i < lancamento;i++){
+    for(int i = 0; i < dados.length;i++){
 //      print("N: ${i} : G: ${dados.elementAt(i).gravidade}");
       cont += dados.elementAt(i).tempo;
     }
+    return cont / dados.length;
+  }
 
-    return cont / lancamento;
+  double varianciaTempo(){
+    double _var = 0;
+    for(int i = 0; i < dados.length;i++){
+      _var +=  pow((dados.elementAt(i).tempo - tempoMedio()),2);
+    }
+    return _var/dados.length;
+  }
 
+  double desvioPadraoTempo(){
+    return sqrt(varianciaTempo());
+  }
+
+
+  double varianciaGravidade(){
+    double _var = 0;
+    for(int i = 0; i < dados.length;i++){
+      _var +=  pow((dados.elementAt(i).gravidade - calcGravidadeMedia()),2);
+    }
+    return _var/dados.length;
+  }
+
+  double desvioPadraoGravidade(){
+    return sqrt(varianciaGravidade());
+  }
+
+  void sortTempo(){
+    for(int i = 0; i < dados.length;i++){
+      tempoOrdenado.add(dados.elementAt(i).tempo);
+    }
+    tempoOrdenado.sort();
+    print(tempoOrdenado.toString());
+  }
+
+  void sortGravidade(){
+    for(int i = 0; i < dados.length;i++){
+      gravidadeOrdenado.add(dados.elementAt(i).gravidade);
+    }
+    gravidadeOrdenado.sort();
+    print(gravidadeOrdenado.toString());
+  }
+
+  double medianaTempo(){
+    int medio = (tempoOrdenado.length/2).toInt();
+    double calc = 0;
+    if(tempoOrdenado.length % 2 == 0){
+      //0,1,2,3,4,5
+      calc = (tempoOrdenado.elementAt(medio-1) + tempoOrdenado.elementAt(medio))/2;
+    }else{
+      //0,1,2,3,4
+      calc = (tempoOrdenado.elementAt(medio));
+
+    }
+    return calc;
+  }
+
+  double medianaGravidade(){
+    int medio = (gravidadeOrdenado.length/2).toInt();
+    double calc = 0;
+    if(gravidadeOrdenado.length % 2 == 0){
+      //0,1,2,3,4,5
+      calc = (gravidadeOrdenado.elementAt(medio-1) + gravidadeOrdenado.elementAt(medio))/2;
+    }else{
+      //0,1,2,3,4
+      calc = (gravidadeOrdenado.elementAt(medio));
+    }
+    return calc;
   }
 
 

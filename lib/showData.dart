@@ -42,6 +42,7 @@ class _ShowDataState extends State<ShowData> {
   double tempo = 0;
   double _gravidadeFinal = 0;
   bool control = false;
+  int amostras = 10;
 
 
 
@@ -87,7 +88,7 @@ class _ShowDataState extends State<ShowData> {
           gravity.clearData();
         }
 
-        if(tempo > 0 && contador < 10){
+        if(tempo > 0 && contador < amostras){
           print(tempo);
           print(contador);
           gravity.setValues(++contador, tempo);
@@ -188,26 +189,16 @@ class _ShowDataState extends State<ShowData> {
       )
     ];
 
-
-//    gravity.setValues(1, 0.45);
-//    gravity.setValues(2, 0.47);
-//    gravity.setValues(3, 0.43);
-//    gravity.setValues(4, 0.42);
-//    gravity.setValues(5, 0.49);
-//    gravity.setValues(6, 0.41);
-//    gravity.setValues(7, 0.38);
-//    gravity.setValues(8, 0.59);
-//    gravity.setValues(9, 0.38);
-//    gravity.setValues(10, 0.45);
-
     //10 número de amostras
-    if(gravity.lancamento == 10 && control == false){
+    if(gravity.lancamento == amostras && control == false){
       control = true;
       _gravidadeFinal = gravity.calcGravidadeMedia();
       print("Gravidade média 2 : ${gravity.calcGravidadeMedia()}");
+      gravity.sortTempo();
+      gravity.sortGravidade();
+//      print(gravity.medianaTempo().toString());
+//      print(gravity.medianaGravidade().toString());
     }
-
-
 
     return new Scaffold(
 //      resizeToAvoidBottomPadding: false,
@@ -572,7 +563,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text("10,00",
+                                                          child: Text(contador < amostras ? "0.00" : gravity.medianaGravidade().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
@@ -616,7 +607,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text("0.45",
+                                                          child: Text(contador < amostras ? "0.00" : gravity.medianaTempo().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
@@ -674,7 +665,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text("10,00",
+                                                          child: Text(gravity.desvioPadraoGravidade().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
@@ -718,7 +709,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text("0.45",
+                                                          child: Text(gravity.desvioPadraoTempo().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
