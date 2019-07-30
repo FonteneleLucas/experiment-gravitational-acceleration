@@ -30,7 +30,8 @@ class ScatterPlot {
 
 
 class _ShowDataState extends State<ShowData> {
-  PageController controller;
+  PageController _pageController;
+
   FlutterBluetoothSerial bluetooth = FlutterBluetoothSerial.instance;
   static final TextEditingController _text = new TextEditingController();
   static final TextEditingController _contador = new TextEditingController();
@@ -40,6 +41,7 @@ class _ShowDataState extends State<ShowData> {
   int contador = 0;
   double tempo = 0;
   double _gravidadeFinal = 0;
+  bool control = false;
 
 
 
@@ -49,6 +51,15 @@ class _ShowDataState extends State<ShowData> {
     super.initState();
     initPlatformState();
     _isConnected();
+    //Inicia com 0
+    gravity.setValues(0, 0);
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
 
@@ -56,10 +67,11 @@ class _ShowDataState extends State<ShowData> {
     print("resetCall");
     contador = 0;
     _gravidadeFinal = 0;
-
+    gravity.clearData();
+    control = false;
   }
 
-  void calculoGravidade(){}
+
 
   Future<void> initPlatformState() async {
     bluetooth.onRead().listen((msg) {
@@ -67,10 +79,20 @@ class _ShowDataState extends State<ShowData> {
 //        print('Read: $msg');
         _text.text += msg;
         tempo = double.parse(_text.text.toString());
-        print(tempo);
+
         _text.text = "";
-        //Passa os dados para a classe aqui
-        calculoGravidade();
+
+        //Espera um tempo 0 e contador 0 resolvendo problema de lista vazia no inicio
+        if(tempo == 0 && contador == 0){
+          gravity.clearData();
+        }
+
+        if(tempo > 0 && contador < 10){
+          print(tempo);
+          print(contador);
+          gravity.setValues(++contador, tempo);
+        }
+
       });
     });
   }
@@ -166,22 +188,21 @@ class _ShowDataState extends State<ShowData> {
       )
     ];
 
-//    gravity.setValues(0, 0.46);
-    gravity.setValues(1, 0.45);
-    gravity.setValues(2, 0.47);
-    gravity.setValues(3, 0.43);
-    gravity.setValues(4, 0.42);
-    gravity.setValues(5, 0.49);
-    gravity.setValues(6, 0.41);
-    gravity.setValues(7, 0.38);
-    gravity.setValues(8, 0.59);
-    gravity.setValues(9, 0.38);
-    gravity.setValues(10, 0.45);
 
-    contador = 10;
+//    gravity.setValues(1, 0.45);
+//    gravity.setValues(2, 0.47);
+//    gravity.setValues(3, 0.43);
+//    gravity.setValues(4, 0.42);
+//    gravity.setValues(5, 0.49);
+//    gravity.setValues(6, 0.41);
+//    gravity.setValues(7, 0.38);
+//    gravity.setValues(8, 0.59);
+//    gravity.setValues(9, 0.38);
+//    gravity.setValues(10, 0.45);
 
     //10 número de amostras
-    if(gravity.lancamento == 10){
+    if(gravity.lancamento == 10 && control == false){
+      control = true;
       _gravidadeFinal = gravity.calcGravidadeMedia();
       print("Gravidade média 2 : ${gravity.calcGravidadeMedia()}");
     }
@@ -194,6 +215,7 @@ class _ShowDataState extends State<ShowData> {
           child: Container(
             child: PageIndicatorContainer(
               pageView: PageView(
+                controller: _pageController,
                 children: <Widget>[
                   Column(
                     children: <Widget>[
@@ -226,9 +248,8 @@ class _ShowDataState extends State<ShowData> {
                               flex: 9,
                               child: Container(
                                 alignment: Alignment(0.9, 0),
-//                    color: Colors.white70,
+
                                 child: Container(
-                                  width: 105,
                                   child: Text(
                                     "Lançamentos: "+ contador.toString(),
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -273,7 +294,10 @@ class _ShowDataState extends State<ShowData> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.fromLTRB(270, 55, 0, 0),
+                              alignment: Alignment(0.82, 0),
+                              margin: const EdgeInsets.only(left: 0, top: 55, right: 0, bottom: 0),
+//                              color: Colors.blueGrey,
+//                              padding: EdgeInsets.fromLTRB(270, 55, 0, 0),
                               child: Text(
                                 "m/s²",
                                 style: TextStyle(
@@ -291,7 +315,13 @@ class _ShowDataState extends State<ShowData> {
                           height: 50,
                           child: InkWell(
                             onTap: () {
-                              Navigator.of(context).pushNamed('/showTable');
+                              if (_pageController.hasClients) {
+                                _pageController.animateToPage(
+                                  1,
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.easeInOut,
+                                );
+                              }
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(20),
@@ -350,7 +380,13 @@ class _ShowDataState extends State<ShowData> {
                                           tooltip: 'Voltar',
                                           onPressed: () {
                                             print("Voltar");
-                                            Navigator.of(context).pushNamed('/homePage');
+                                            if (_pageController.hasClients) {
+                                              _pageController.animateToPage(
+                                                0,
+                                                duration: const Duration(milliseconds: 400),
+                                                curve: Curves.easeInOut,
+                                              );
+                                            }
                                           },
                                         ),
                                       ),
@@ -376,17 +412,20 @@ class _ShowDataState extends State<ShowData> {
                                 child: Column(
                                   children: <Widget>[
                                     Container(
-//                    color: Colors.lightBlueAccent,
+                                      margin: const EdgeInsets.only(left: 5, top: 8, right: 5, bottom: 10),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: Material(
+                                                color: Colors.white,
+                                                shadowColor: Colors.white70,
+                                                elevation: 5,
 
-                                      child: Material(
-                                        color: Colors.white,
-                                        shadowColor: Colors.white70,
-                                        elevation: 5,
-
-                                        child: bodyData(),
-                                      ),
-
-
+                                                child: bodyData(),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                     ),
                                     Container(
                                         margin: EdgeInsets.only(top: 10),
@@ -698,7 +737,13 @@ class _ShowDataState extends State<ShowData> {
                                         height: 50,
                                         child: InkWell(
                                           onTap: () {
-                                            Navigator.of(context).pushNamed('/showChart');
+                                            if (_pageController.hasClients) {
+                                              _pageController.animateToPage(
+                                              2,
+                                                duration: const Duration(milliseconds: 400),
+                                                curve: Curves.easeInOut,
+                                              );
+                                            }
                                           },
                                           child: Material(
                                             borderRadius: BorderRadius.circular(20),
@@ -750,7 +795,13 @@ class _ShowDataState extends State<ShowData> {
                                               tooltip: 'Voltar',
                                               onPressed: () {
                                                 print("Voltar");
-                                                Navigator.of(context).pushNamed('/homePage');
+                                                if (_pageController.hasClients) {
+                                                  _pageController.animateToPage(
+                                                    1,
+                                                    duration: const Duration(milliseconds: 400),
+                                                    curve: Curves.easeInOut,
+                                                  );
+                                                }
                                               },
                                             ),
                                           ),
@@ -782,7 +833,7 @@ class _ShowDataState extends State<ShowData> {
                                   padding: new EdgeInsets.all(15),
                                   child: new SizedBox(
                                       height: 200.0,
-                                      child: LineChart(series1,
+                                      child: LineChart(series1, animate: false,
                                         behaviors: [
                                           new ChartTitle('Lançamentos',
                                               behaviorPosition: BehaviorPosition.bottom,
@@ -825,7 +876,7 @@ class _ShowDataState extends State<ShowData> {
                                   padding: new EdgeInsets.all(15),
                                   child: new SizedBox(
                                       height: 200.0,
-                                      child: LineChart(series2,
+                                      child: LineChart(series2, animate: false,
                                         behaviors: [
                                           new ChartTitle('Lançamentos',
                                               behaviorPosition: BehaviorPosition.bottom,
@@ -868,7 +919,52 @@ class _ShowDataState extends State<ShowData> {
                                   padding: new EdgeInsets.all(15),
                                   child: new SizedBox(
                                       height: 200.0,
-                                      child: ScatterPlotChart(series3,animate: true,)
+                                      child: ScatterPlotChart(series3,animate: true,
+                                        behaviors: [
+                                          new ChartTitle('Gravidade (m/s²)',
+                                              behaviorPosition: BehaviorPosition.bottom,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+                                          new ChartTitle('Tempo (ms)',
+                                              behaviorPosition: BehaviorPosition.start,
+                                              titleStyleSpec: TextStyleSpec(fontSize: 11),
+                                              titleOutsideJustification:
+                                              OutsideJustification.middleDrawArea),
+
+
+                                        ],)
+                                  ),
+                                ),
+                              )
+                          ),
+                          Container(
+                              margin: const EdgeInsets.only(left: 8, top:15, right: 8, bottom: 28),
+                              height: 50,
+                              child: InkWell(
+                                onTap: () {
+                                  if (_pageController.hasClients) {
+                                    _pageController.animateToPage(
+                                      1,
+                                      duration: const Duration(milliseconds: 400),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  }
+                                },
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(20),
+                                  shadowColor: Colors.greenAccent,
+                                  color: Colors.green,
+                                  elevation: 7,
+                                  child: Center(
+                                    child: Text(
+                                      "VOLTAR",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Montserrat'
+                                      ),
+                                    ),
                                   ),
                                 ),
                               )
@@ -878,7 +974,6 @@ class _ShowDataState extends State<ShowData> {
                   )
 
                 ],
-                controller: new PageController(),
               ),
               align: IndicatorAlign.bottom,
               length: 3,

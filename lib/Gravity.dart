@@ -31,12 +31,19 @@ class Gravity {
 
   //if tempo > 0
   setValues(int _lancamentos, double _tempo) {
-    lancamento = _lancamentos;
-    tempo = _tempo;
-    gravidade = calculaGravidade(lancamento, tempo);
+//    if(tempo != 0){
+      lancamento = _lancamentos;
+      tempo = _tempo;
+      gravidade = calculaGravidade(lancamento, tempo);
 
-    var gravity = Gravity(lancamento: lancamento, tempo: tempo, gravidade: gravidade);
-    dados.add(gravity);
+      var gravity = Gravity(lancamento: lancamento, tempo: tempo, gravidade: gravidade);
+      dados.add(gravity);
+//    }
+
+  }
+
+  clearData(){
+    dados.clear();
   }
 
   double calculaGravidade(int lancamento, double tempo) {
