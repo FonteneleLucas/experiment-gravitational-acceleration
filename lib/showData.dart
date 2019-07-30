@@ -66,6 +66,7 @@ class _ShowDataState extends State<ShowData> {
 
   void resetCalc(){
     print("resetCall");
+    gravity.setValues(0, 0);
     contador = 0;
     _gravidadeFinal = 0;
     gravity.clearData();
@@ -285,8 +286,8 @@ class _ShowDataState extends State<ShowData> {
                               ),
                             ),
                             Container(
-                              alignment: Alignment(0.82, 0),
-                              margin: const EdgeInsets.only(left: 0, top: 55, right: 0, bottom: 0),
+                              alignment: Alignment.centerRight,
+                              margin: const EdgeInsets.only(left: 0, top: 55, right: 10, bottom: 0),
 //                              color: Colors.blueGrey,
 //                              padding: EdgeInsets.fromLTRB(270, 55, 0, 0),
                               child: Text(
@@ -341,6 +342,7 @@ class _ShowDataState extends State<ShowData> {
                           child: Text(
                             'Calcular novamente',
                             style: TextStyle(
+                                fontSize: 20,
                                 color: Colors.green,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
@@ -445,21 +447,9 @@ class _ShowDataState extends State<ShowData> {
                                                         Container(
                                                           padding: EdgeInsets.only(top: 20),
                                                           alignment: Alignment.topCenter,
-                                                          child: Text("GRAVIDADE", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
+                                                          child: Text("GRAVIDADE (m/s²)", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
                                                             fontWeight: FontWeight.bold,),),
                                                         ),
-                                                        Container(
-                                                          alignment:Alignment.centerRight,
-                                                          padding: EdgeInsets.only(right: 4,bottom: 20),
-                                                          child: Text(
-                                                            "m/s²",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: Colors.green),
-                                                          ),
-                                                        ),
-
                                                         Center(
                                                           child: Text(_gravidadeFinal.toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
@@ -489,19 +479,8 @@ class _ShowDataState extends State<ShowData> {
                                                         Container(
                                                           padding: EdgeInsets.only(top: 20),
                                                           alignment: Alignment.topCenter,
-                                                          child: Text("TEMPO", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
+                                                          child: Text("TEMPO (s)", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
                                                             fontWeight: FontWeight.bold,),),
-                                                        ),
-                                                        Container(
-                                                          alignment:Alignment.centerRight,
-                                                          padding: EdgeInsets.only(right: 10,bottom: 20),
-                                                          child: Text(
-                                                            "ms",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: Colors.green),
-                                                          ),
                                                         ),
 
                                                         Center(
@@ -547,20 +526,10 @@ class _ShowDataState extends State<ShowData> {
                                                         Container(
                                                           padding: EdgeInsets.only(top: 20),
                                                           alignment: Alignment.topCenter,
-                                                          child: Text("GRAVIDADE", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
+                                                          child: Text("GRAVIDADE (m/s²)", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
                                                             fontWeight: FontWeight.bold,),),
                                                         ),
-                                                        Container(
-                                                          alignment:Alignment.centerRight,
-                                                          padding: EdgeInsets.only(right: 4,bottom: 20),
-                                                          child: Text(
-                                                            "m/s²",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: Colors.green),
-                                                          ),
-                                                        ),
+
 
                                                         Center(
                                                           child: Text(contador < amostras ? "0.00" : gravity.medianaGravidade().toStringAsFixed(2),
@@ -591,19 +560,8 @@ class _ShowDataState extends State<ShowData> {
                                                         Container(
                                                           padding: EdgeInsets.only(top: 20),
                                                           alignment: Alignment.topCenter,
-                                                          child: Text("TEMPO", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
+                                                          child: Text("TEMPO (s)", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
                                                             fontWeight: FontWeight.bold,),),
-                                                        ),
-                                                        Container(
-                                                          alignment:Alignment.centerRight,
-                                                          padding: EdgeInsets.only(right: 10,bottom: 20),
-                                                          child: Text(
-                                                            "ms",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: Colors.green),
-                                                          ),
                                                         ),
 
                                                         Center(
@@ -649,19 +607,8 @@ class _ShowDataState extends State<ShowData> {
                                                         Container(
                                                           padding: EdgeInsets.only(top: 20),
                                                           alignment: Alignment.topCenter,
-                                                          child: Text("GRAVIDADE", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
+                                                          child: Text("GRAVIDADE (m/s²)", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
                                                             fontWeight: FontWeight.bold,),),
-                                                        ),
-                                                        Container(
-                                                          alignment:Alignment.centerRight,
-                                                          padding: EdgeInsets.only(right: 4,bottom: 20),
-                                                          child: Text(
-                                                            "m/s²",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: Colors.green),
-                                                          ),
                                                         ),
 
                                                         Center(
@@ -693,19 +640,8 @@ class _ShowDataState extends State<ShowData> {
                                                         Container(
                                                           padding: EdgeInsets.only(top: 20),
                                                           alignment: Alignment.topCenter,
-                                                          child: Text("TEMPO", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
+                                                          child: Text("TEMPO (s)", style: TextStyle(color: Colors.black54,fontSize: 15, fontFamily: 'Montserrat' ,
                                                             fontWeight: FontWeight.bold,),),
-                                                        ),
-                                                        Container(
-                                                          alignment:Alignment.centerRight,
-                                                          padding: EdgeInsets.only(right: 10,bottom: 20),
-                                                          child: Text(
-                                                            "ms",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: Colors.green),
-                                                          ),
                                                         ),
 
                                                         Center(

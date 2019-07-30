@@ -145,19 +145,98 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
 //      resizeToAvoidBottomPadding: false,
-      body: Column(
+      body: Stack(
         children: <Widget>[
-          Container(
-              margin: const EdgeInsets.only(left: 0, top: 120, right: 0, bottom: 0),
-//              color: Colors.blue,
-              child: Center(
-              child: Text(
-                "Dispositivos:",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                      margin: const EdgeInsets.only(top: 80),
+                      //              color: Colors.blue,
+                      child: Text(
+                        "Gravity Sensor",
+                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+
+                      )
+                  ),
+                ],
               ),
-            )
+            ],
           ),
-          Container(
+
+
+          Center(
+              child: Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+//                color: Colors.blue,
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 100),
+                        height: 20,
+                        child: Center(
+                            child: Text("Dispositivos")
+                          ),
+
+                      ),
+                    ],
+                  )
+
+
+              )
+          ),
+          Center(
+              child: Container(
+                margin: const EdgeInsets.only(left: 20, right: 20),
+//                color: Colors.blue,
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      height: 50,
+                      child: Material(
+                        elevation: 2,
+                        child: Center(
+                          child: DropdownButton(
+                            style: TextStyle(letterSpacing: 2, fontWeight: FontWeight.bold, color: Colors.black),
+                            items: _getDeviceItems(),
+                            onChanged: (value) => setState(() => _device = value),
+                            value: _device,
+                            isExpanded: true,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+
+
+              )
+          )
+        ],
+      )
+
+//        Column(
+//        children: <Widget>[
+//
+//          Container(
+//            alignment: Alignment.topLeft,
+//              margin: const EdgeInsets.only(left: 20, top: 80, right: 0, bottom: 0),
+////              color: Colors.blue,
+//                child: Text(
+//                  "Dispositivos:",
+//                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//
+//              )
+//          ),
+//          Center(
+//            child: Container(
+//              color: Colors.blue,
+//              child: Text("asd"),
+//            ),
+//          )
+          /*Container(
             margin: const EdgeInsets.only(left: 8, top: 80, right: 8, bottom: 0),
             height: 50,
             child: Material(
@@ -230,11 +309,10 @@ class _HomePageState extends State<HomePage> {
                     )
                 )
             ),
-          )
+          )*/
 
 
-        ],
-      )
+
     );
   }
 
