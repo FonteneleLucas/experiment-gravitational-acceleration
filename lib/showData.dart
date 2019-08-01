@@ -44,8 +44,10 @@ class _ShowDataState extends State<ShowData> {
   double tempo = 0;
   double _gravidadeFinal = 0;
   bool control = false;
-  int amostras = 4;
+  int amostras = 0;
   bool aceitar = true;
+  String gravidadeText;
+  bool end = false;
 
 
 
@@ -57,6 +59,7 @@ class _ShowDataState extends State<ShowData> {
     _isConnected();
     //Inicia com 0
     _pageController = PageController();
+    gravidadeText = "0.00";
   }
 
   @override
@@ -73,17 +76,29 @@ class _ShowDataState extends State<ShowData> {
     _gravidadeFinal = 0;
     gravity.clearData();
     control = false;
+    amostras = contador;
   }
 
   void aceitarLancamento(){
       print("Finalizar");
       amostras = contador;
+      control = true;
+      gravidadeText = _gravidadeFinal.toStringAsFixed(2);
   }
 
   void negarLancamento(){
     print("negar");
     gravity.dados.removeLast();
     gravity.clearLast(--contador);
+    amostras = contador;
+    end = false;
+    if(gravity.dados.length > 0){
+      gravidadeText = gravity.dados.last.gravidade.toStringAsFixed(2);
+    }else{
+      gravidadeText = "0.00";
+    }
+
+
     for(int i = 0; i < gravity.dados.length; i++){
       print(gravity.dados.elementAt(i).gravidade);
     }
@@ -102,10 +117,14 @@ class _ShowDataState extends State<ShowData> {
         //Espera um tempo 0 e contador 0 resolvendo problema de lista vazia no inicio
 
 
-        if(tempo > 0 && contador < amostras){
+        if(tempo > 0){
+
           print(tempo);
           print(contador);
           gravity.setValues(++contador, tempo);
+          end = false;
+          gravidadeText = gravity.dados.last.gravidade.toStringAsFixed(2);
+          amostras = contador;
           for(int i = 0; i < gravity.dados.length; i++){
             print(gravity.dados.elementAt(i).gravidade);
           }
@@ -209,8 +228,9 @@ class _ShowDataState extends State<ShowData> {
     ];
 
     //10 número de amostras
-    if(gravity.lancamento == amostras && control == false){
-      control = true;
+    if(control == true){
+      control = false;
+      end = true;
       _gravidadeFinal = gravity.calcGravidadeMedia();
       print("Gravidade média 2 : ${gravity.calcGravidadeMedia()}");
       gravity.sortTempo();
@@ -294,7 +314,7 @@ class _ShowDataState extends State<ShowData> {
                                   Container(
 //                        color: Colors.red,
                                     child: Center(
-                                      child: Text(gravity.dados.length == 0 ? "0.00" : contador == amostras ? _gravidadeFinal.toStringAsFixed(2) : gravity.dados.last.gravidade.toStringAsFixed(2),
+                                      child: Text(end == false ? gravidadeText : _gravidadeFinal.toStringAsFixed(2),
 //                                        _gravidadeFinal.toStringAsFixed(2),
                                         style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
                                       ),
@@ -645,7 +665,7 @@ class _ShowDataState extends State<ShowData> {
 
 
                                                         Center(
-                                                          child: Text(contador < amostras ? "0.00" : gravity.medianaGravidade().toStringAsFixed(2),
+                                                          child: Text(control == false ? "0.00" : gravity.medianaGravidade().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
@@ -678,7 +698,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text(contador < amostras ? "0.00" : gravity.medianaTempo().toStringAsFixed(2),
+                                                          child: Text(control == false ? "0.00" : gravity.medianaTempo().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
