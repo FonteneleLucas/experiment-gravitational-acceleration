@@ -1,7 +1,7 @@
 import 'dart:math';
 
 class Gravity {
-  double h = 1.0;
+  double h = 0.50;
   int lancamento;
   double tempo;
   double gravidade;
@@ -49,6 +49,10 @@ class Gravity {
     dados.clear();
     tempoOrdenado.clear();
     gravidadeOrdenado.clear();
+  }
+
+  clearLast(){
+    dados.remove(dados.length-1);
   }
 
   double calculaGravidade(int lancamento, double tempo) {

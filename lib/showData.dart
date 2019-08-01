@@ -36,6 +36,7 @@ class _ShowDataState extends State<ShowData> {
   static final TextEditingController _text = new TextEditingController();
   static final TextEditingController _contador = new TextEditingController();
 
+  var dados = new List<Gravity>();
 
   bool _connected = false;
   int contador = 0;
@@ -43,6 +44,7 @@ class _ShowDataState extends State<ShowData> {
   double _gravidadeFinal = 0;
   bool control = false;
   int amostras = 10;
+  bool aceitar = true;
 
 
 
@@ -53,7 +55,6 @@ class _ShowDataState extends State<ShowData> {
     initPlatformState();
     _isConnected();
     //Inicia com 0
-    gravity.setValues(0, 0);
     _pageController = PageController();
   }
 
@@ -73,6 +74,16 @@ class _ShowDataState extends State<ShowData> {
     control = false;
   }
 
+  void aceitarLancamento(){
+      print("aceitar");
+      aceitar = false;
+  }
+
+  void negarLancamento(){
+      gravity.clearLast();
+      --contador;
+      print("negar");
+  }
 
 
   Future<void> initPlatformState() async {
@@ -85,9 +96,7 @@ class _ShowDataState extends State<ShowData> {
         _text.text = "";
 
         //Espera um tempo 0 e contador 0 resolvendo problema de lista vazia no inicio
-        if(tempo == 0 && contador == 0){
-          gravity.clearData();
-        }
+
 
         if(tempo > 0 && contador < amostras){
           print(tempo);
@@ -121,12 +130,12 @@ class _ShowDataState extends State<ShowData> {
 
         ),
         DataColumn(
-          label: Text("Tempo (ms)", style: TextStyle(fontSize: 10),),
+          label: Text("T (ms)", style: TextStyle(fontSize: 10),),
           numeric: true,
 
         ),
         DataColumn(
-          label: Text("Gravidade (m/s²)",  style: TextStyle(fontSize: 10)),
+          label: Text("G (m/s²)",  style: TextStyle(fontSize: 10)),
           numeric: true,
         ),
       ],
@@ -136,17 +145,17 @@ class _ShowDataState extends State<ShowData> {
           cells: [
             DataCell(
               Text(name.lancamento.toString(), style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-              showEditIcon: false,
+//              showEditIcon: false,
               placeholder: false,
             ),
             DataCell(
               Text(name.tempo.toString(), style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-              showEditIcon: false,
+//              showEditIcon: false,
               placeholder: false,
             ),
             DataCell(
               Text(name.gravidade.toStringAsFixed(2), style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-              showEditIcon: false,
+//              showEditIcon: false,
               placeholder: false,
             )
           ],
@@ -243,7 +252,7 @@ class _ShowDataState extends State<ShowData> {
 
                                 child: Container(
                                   child: Text(
-                                    "Lançamentos: "+ contador.toString(),
+                                    "Lançamentos: "+ "$contador",
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -275,10 +284,9 @@ class _ShowDataState extends State<ShowData> {
                                   Container(
 //                        color: Colors.red,
                                     child: Center(
-                                      child: Text(
-                                        _gravidadeFinal.toStringAsFixed(2),
-                                        style:
-                                        TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                                      child: Text(gravity.dados.length == 0 ? "0.00" : contador == 10 ? _gravidadeFinal.toStringAsFixed(2) : gravity.dados.last.gravidade.toStringAsFixed(2),
+//                                        _gravidadeFinal.toStringAsFixed(2),
+                                        style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -302,7 +310,7 @@ class _ShowDataState extends State<ShowData> {
                         ),
                       ),
                       Container(
-                          margin: const EdgeInsets.only(left: 6, top: 80, right: 6, bottom: 0),
+                          margin: const EdgeInsets.only(left: 6, top: 50, right: 6, bottom: 0),
 //              color: Colors.black,
                           height: 50,
                           child: InkWell(
@@ -334,10 +342,102 @@ class _ShowDataState extends State<ShowData> {
                           )
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left: 0, top: 80, right: 0, bottom: 0),
+                        margin: const EdgeInsets.only(left: 10, top: 40, right: 10, bottom: 10),
+//                    color: Colors.lightGreen,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+
+                                height: 50,
+                                margin: EdgeInsets.only(right: 5),
+//                            color: Colors.black12,
+                                child:  Material(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  shadowColor: Colors.white70,
+                                  elevation: 10,
+
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            negarLancamento();
+
+                                          });
+                                        },
+                                        child: Material(
+                                          borderRadius: BorderRadius.circular(20),
+                                          shadowColor: Colors.greenAccent,
+                                          color: Colors.redAccent,
+                                          elevation: 7,
+                                          child: Center(
+                                            child: Text(
+                                              "NEGAR",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Montserrat'
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ),
+
+                              ),
+                            ),
+                            Expanded(
+                              flex: 5,
+                              child: Container(
+                                height: 50,
+                                margin: EdgeInsets.only(left: 5),
+//                            color: Colors.black12,
+                                child:  Material(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  shadowColor: Colors.white70,
+                                  elevation: 10,
+
+                                  child: Container(
+                                      child: InkWell(
+                                        onTap: () {
+                                          aceitarLancamento();
+                                        },
+                                        child: Material(
+                                          borderRadius: BorderRadius.circular(20),
+                                          shadowColor: Colors.greenAccent,
+                                          color: Colors.green,
+                                          elevation: 7,
+                                          child: Center(
+                                            child: Text(
+                                              "ACEITAR",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Montserrat'
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 0, top: 40, right: 0, bottom: 0),
                         child: InkWell(
                           onTap: () {
-                            resetCalc();
+                            setState(() {
+                              resetCalc();
+                            });
+
+
                           },
                           child: Text(
                             'Calcular novamente',

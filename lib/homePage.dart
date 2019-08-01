@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _connected = true;
             _pressed = false;
+            Navigator.of(context).pushNamed('/showData');
           });
 
           break;
@@ -73,6 +74,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _connected = false;
             _pressed = false;
+            Navigator.of(context).pushNamed('/homePage');
           });
           break;
 
@@ -179,7 +181,6 @@ class _HomePageState extends State<HomePage> {
                         child: Center(
                             child: Text("Dispositivos")
                           ),
-
                       ),
                     ],
                   )
@@ -210,10 +211,41 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 )
-
-
               )
-          )
+          ),
+
+            Center(
+              child: Container(
+                margin: const EdgeInsets.only(left: 8, right: 8),
+                alignment: Alignment(0.0, 0.95),
+                child: Container(height: 50,
+                  child: InkWell(
+                    onTap: () {
+                      _connected ? _disconnect() : _connect();
+
+                    },
+                    child: Material(
+                      borderRadius: BorderRadius.circular(20),
+                      shadowColor: Colors.greenAccent,
+                      color: Colors.green,
+                      elevation: 7,
+                      child: Center(
+                        child: Text(
+                          _connected ? 'DESCONECTAR' : 'CONECTAR',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Montserrat'
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ),
+            )
+            )
+
+
         ],
       )
 
