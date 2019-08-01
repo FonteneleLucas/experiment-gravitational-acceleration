@@ -44,7 +44,7 @@ class _ShowDataState extends State<ShowData> {
   double tempo = 0;
   double _gravidadeFinal = 0;
   bool control = false;
-  int amostras = 3;
+  int amostras = 4;
   bool aceitar = true;
 
 
@@ -76,8 +76,8 @@ class _ShowDataState extends State<ShowData> {
   }
 
   void aceitarLancamento(){
-      print("aceitar");
-      aceitar = false;
+      print("Finalizar");
+      amostras = contador;
   }
 
   void negarLancamento(){
@@ -294,7 +294,7 @@ class _ShowDataState extends State<ShowData> {
                                   Container(
 //                        color: Colors.red,
                                     child: Center(
-                                      child: Text(gravity.dados.length == 0 ? "0.00" : contador == 10 ? _gravidadeFinal.toStringAsFixed(2) : gravity.dados.last.gravidade.toStringAsFixed(2),
+                                      child: Text(gravity.dados.length == 0 ? "0.00" : contador == amostras ? _gravidadeFinal.toStringAsFixed(2) : gravity.dados.last.gravidade.toStringAsFixed(2),
 //                                        _gravidadeFinal.toStringAsFixed(2),
                                         style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
                                       ),
@@ -412,7 +412,10 @@ class _ShowDataState extends State<ShowData> {
                                   child: Container(
                                       child: InkWell(
                                         onTap: () {
-                                          aceitarLancamento();
+                                          setState(() {
+                                            aceitarLancamento();
+                                          });
+
                                         },
                                         child: Material(
                                           borderRadius: BorderRadius.circular(20),
@@ -421,7 +424,7 @@ class _ShowDataState extends State<ShowData> {
                                           elevation: 7,
                                           child: Center(
                                             child: Text(
-                                              "ACEITAR",
+                                              "FINALIZAR",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
