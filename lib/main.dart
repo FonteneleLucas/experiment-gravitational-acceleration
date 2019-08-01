@@ -12,6 +12,6 @@ void main() => runApp(new MaterialApp(
     '/showTable': (BuildContext context) => new ShowTable(),
     '/showChart': (BuildContext context) => new ShowChart(),
   },
-//  home: new HomePage(),
-    home: new ShowData()
+  home: new HomePage(),
+//    home: new ShowData()
 ));

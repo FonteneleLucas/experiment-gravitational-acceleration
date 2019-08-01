@@ -39,10 +39,12 @@ class Gravity {
       tempo = _tempo;
       gravidade = calculaGravidade(lancamento, tempo);
 
-      var gravity = Gravity(lancamento: lancamento, tempo: tempo, gravidade: gravidade);
-      dados.add(gravity);
+        var gravity = Gravity(lancamento: lancamento, tempo: tempo, gravidade: gravidade);
+        dados.add(gravity);
 //      dados.insert(_lancamentos-1, gravity);
-      print("lançamento: ${_lancamentos-1}");
+        print("lançamento: ${_lancamentos-1}");
+
+
 //
 
   }

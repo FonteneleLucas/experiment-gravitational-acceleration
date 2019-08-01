@@ -91,7 +91,7 @@ class _ShowDataState extends State<ShowData> {
     gravity.dados.removeLast();
     gravity.clearLast(--contador);
     amostras = contador;
-    end = false;
+    end = false;//
     if(gravity.dados.length > 0){
       gravidadeText = gravity.dados.last.gravidade.toStringAsFixed(2);
     }else{
@@ -110,7 +110,12 @@ class _ShowDataState extends State<ShowData> {
       setState(() {
 //        print('Read: $msg');
         _text.text += msg;
-        tempo = double.parse(_text.text.toString());
+        try{
+          tempo = double.parse(_text.text.toString());
+        }on FormatException{
+          print("Error");
+        }
+
 
         _text.text = "";
 
@@ -122,6 +127,7 @@ class _ShowDataState extends State<ShowData> {
           print(tempo);
           print(contador);
           gravity.setValues(++contador, tempo);
+
           end = false;
           gravidadeText = gravity.dados.last.gravidade.toStringAsFixed(2);
           amostras = contador;
@@ -403,7 +409,7 @@ class _ShowDataState extends State<ShowData> {
                                           elevation: 7,
                                           child: Center(
                                             child: Text(
-                                              "NEGAR",
+                                              "RESCUSAR",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
@@ -665,7 +671,7 @@ class _ShowDataState extends State<ShowData> {
 
 
                                                         Center(
-                                                          child: Text(control == false ? "0.00" : gravity.medianaGravidade().toStringAsFixed(2),
+                                                          child: Text(end == false ? "0.00" : gravity.medianaGravidade().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
@@ -698,7 +704,7 @@ class _ShowDataState extends State<ShowData> {
                                                         ),
 
                                                         Center(
-                                                          child: Text(control == false ? "0.00" : gravity.medianaTempo().toStringAsFixed(2),
+                                                          child: Text(end == false ? "0.00" : gravity.medianaTempo().toStringAsFixed(2),
                                                               style: TextStyle(fontSize: 45,fontFamily: 'Montserrat', fontWeight: FontWeight.bold)
                                                           ),
                                                         )
