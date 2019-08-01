@@ -41,7 +41,9 @@ class Gravity {
 
       var gravity = Gravity(lancamento: lancamento, tempo: tempo, gravidade: gravidade);
       dados.add(gravity);
-//    }
+//      dados.insert(_lancamentos-1, gravity);
+      print("lançamento: ${_lancamentos-1}");
+//
 
   }
 
@@ -51,8 +53,8 @@ class Gravity {
     gravidadeOrdenado.clear();
   }
 
-  clearLast(){
-    dados.remove(dados.length-1);
+  clearLast(int lanc){
+    lancamento = lanc;
   }
 
   double calculaGravidade(int lancamento, double tempo) {

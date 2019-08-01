@@ -36,14 +36,15 @@ class _ShowDataState extends State<ShowData> {
   static final TextEditingController _text = new TextEditingController();
   static final TextEditingController _contador = new TextEditingController();
 
-  var dados = new List<Gravity>();
+  var dadosTable = new List<Gravity>();
+
 
   bool _connected = false;
   int contador = 0;
   double tempo = 0;
   double _gravidadeFinal = 0;
   bool control = false;
-  int amostras = 10;
+  int amostras = 3;
   bool aceitar = true;
 
 
@@ -80,9 +81,12 @@ class _ShowDataState extends State<ShowData> {
   }
 
   void negarLancamento(){
-      gravity.clearLast();
-      --contador;
-      print("negar");
+    print("negar");
+    gravity.dados.removeLast();
+    gravity.clearLast(--contador);
+    for(int i = 0; i < gravity.dados.length; i++){
+      print(gravity.dados.elementAt(i).gravidade);
+    }
   }
 
 
@@ -102,6 +106,10 @@ class _ShowDataState extends State<ShowData> {
           print(tempo);
           print(contador);
           gravity.setValues(++contador, tempo);
+          for(int i = 0; i < gravity.dados.length; i++){
+            print(gravity.dados.elementAt(i).gravidade);
+          }
+
         }
 
       });
@@ -139,7 +147,8 @@ class _ShowDataState extends State<ShowData> {
           numeric: true,
         ),
       ],
-      rows: gravity.dados
+//12.76, 12.76
+      rows: dadosTable
           .map(
             (name) => DataRow(
           cells: [
@@ -206,6 +215,7 @@ class _ShowDataState extends State<ShowData> {
       print("Gravidade média 2 : ${gravity.calcGravidadeMedia()}");
       gravity.sortTempo();
       gravity.sortGravidade();
+      dadosTable = gravity.dados;
 //      print(gravity.medianaTempo().toString());
 //      print(gravity.medianaGravidade().toString());
     }
